@@ -15,7 +15,7 @@ def main():
     print(train.matrix)
     exit = False
     while not exit:
-        answers = input("Entrez un mot, le nombre de synonymes que vous voulez et la méthode de calcul, i.e. produit scalaire: 0, least-squares: 1, city-block:2\nTapez q pour quitter\n\n").strip().lower().split(" ")
+        answers = input("Entrez un mot, le nombre de synonymes que vous voulez et la méthode de calcul, i.e. produit scalaire: 1, least-squares: 2, city-block:3\nTapez q pour quitter\n\n").strip().lower().split(" ")
         if answers[0] == "q":
             print("AU REVOIR")
             return 0

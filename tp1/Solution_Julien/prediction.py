@@ -58,7 +58,12 @@ class Prediction():
         return self.build_results(results)
     
     def city_block(self):
-        return {}
+        words_to_compare = self.train.matrix[self.index_of_word, :]
+        compared_words = np.abs(self.train.matrix[:] - words_to_compare)
+        results = np.sum(compared_words, axis=1)
+
+        return self.build_results(results)
+        
     
     def build_results(self, result_tab, ascending = True):
         idx_results = np.argsort(result_tab)
