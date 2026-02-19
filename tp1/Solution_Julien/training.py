@@ -7,7 +7,6 @@ class Training():
                 try:
                         self.text = self.read_text(file, encode)
                         self.words = re.findall(r"\b\w+\b", self.text.lower())
-                        #self.words = re.findall(r"\b\w+\b", self.read_text(file, encode).lower())
                 except Exception:
                         print("Erreur lors de l'ouverture du fichier")
 
