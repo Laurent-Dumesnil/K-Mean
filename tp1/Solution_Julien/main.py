@@ -8,7 +8,7 @@ def main():
     # encode =  argv[3]
 
     window = 5
-    file = "C:/travail/AmisTest.txt"
+    file = "C:/travail/GerminalUTF8.txt"
     encode = "UTF-8"
     
     train = Training(window, file, encode)

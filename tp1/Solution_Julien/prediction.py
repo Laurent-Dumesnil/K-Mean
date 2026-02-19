@@ -10,14 +10,14 @@ class Prediction():
             self.synonym_count = int(synonym_count)
             if self.synonym_count <= 0:
                 raise ValueError('Votre nombre de synonyme doit être plus grand que 1')
-            elif self.synonym_count > len(self.train.dict):
+            elif self.synonym_count >= len(self.train.dict):
                 raise ValueError('Votre nombre de synonyme ne peut pas être plus grand que le nombre de mot du texte')
 
             self.method = int(method)
         except:
             raise ValueError('Vous devez entrez un nombre entier comme deuxième et troisième paramètres')
 
-        self.stop_words = ["le", "la", "les", "l'", "un", "une", "des",
+        self.stop_words = ["le", "la", "les", "l", "un", "une", "des",
                             "mon", "ton", "son", "ma", "ta", "sa",
                             "mes", "tes", "ses", "notre", "votre", "leur",
                             "nos", "vos", "leurs", "ce", "cette", "ces",
@@ -29,7 +29,8 @@ class Prediction():
                             "me", "te", "se", "lui", "moi", "toi", "soi",
                             "eux", "pas", "plus", "tout", "tous", "rien",
                             "oui", "non", "ne", "très", "déjà", "aussi",
-                            "celui", "celle", "ceux", "celles", "ceci", "cela", "ça"]
+                            "celui", "celle", "ceux", "celles", "ceci", "cela", "ça"
+                            ,"s","d","j","t","m","n","c","y","que","qu","qui"]
         
         self.index_of_word = self.train.dict[self.word]
 
@@ -44,24 +45,34 @@ class Prediction():
                 raise ValueError('Votre méthode doit être inclus entre 1 et 3')
 
     def dot_product(self):
-        return {}
+        product_matrix = self.train.matrix[self.index_of_word]*self.train.matrix
+        results = np.sum(product_matrix, axis=1)
+
+        return self.build_results(results, False)
 
     def least_squares(self):
         words_to_compare = self.train.matrix[self.index_of_word , :]
         compared_words = (self.train.matrix[:] - words_to_compare) ** 2
         results = np.sum(compared_words, axis=1)
-        idx_results_min = np.argpartition(results,3)
-        result_dict = {}
 
-        i = 0
-        while i < self.synonym_count:
-            if self.train.lookup_table[idx_results_min[i+1]] not in self.stop_words:
-                result_dict[self.train.lookup_table[idx_results_min[i+1]]] = results[idx_results_min[i+1]]
-                i = i + 1
-            elif idx_results_min[i+1] not in self.train.lookup_table:
-                return result_dict
-
-        return result_dict
+        return self.build_results(results)
     
     def city_block(self):
         return {}
+    
+    def build_results(self, result_tab, ascending = True):
+        idx_results = np.argsort(result_tab)
+        if not ascending:
+            idx_results = np.flip(idx_results)
+
+        result_dict = {}
+
+        i = 0
+        j = 0
+        while i < self.synonym_count and j < len(self.train.lookup_table)-1:
+            if self.train.lookup_table[idx_results[j+1]] not in self.stop_words:
+                result_dict[self.train.lookup_table[idx_results[j+1]]] = result_tab[idx_results[j+1]]
+                i = i + 1
+            j = j + 1 
+
+        return result_dict
