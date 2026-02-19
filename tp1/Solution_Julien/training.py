@@ -13,6 +13,13 @@ class Training():
                 self.dict = self.create_dict(self.words)
                 self.matrix = self._create_matrix(self.dict)
                 self.fill_matrix_vector(self.matrix, self.words, self.dict, window)
+                self.lookup_table = self.create_lookup_table()
+
+        def create_lookup_table(self):
+                lookup = []
+                for keys, _ in self.dict.items():
+                        lookup.append(keys)
+                return lookup
 
         def read_text(self, file, encode):
                 f = open(file, encoding=encode)
