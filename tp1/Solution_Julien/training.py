@@ -3,18 +3,26 @@ import re
 import numpy as np
 
 class Training():
+        def __init__(self, window, file, encode):
+                try:
+                        self.text = self.read_text(file, encode)
+                        self.words = re.findall(r"\b\w+\b", self.text.lower())
+                        #self.words = re.findall(r"\b\w+\b", self.read_text(file, encode).lower())
+                except Exception:
+                        print("Erreur lors de l'ouverture du fichier")
 
-        @staticmethod
-        def read_text(file, encode):
+                self.dict = self.create_dict(self.words)
+                self.matrix = self._create_matrix(self.dict)
+                self.fill_matrix_vector(self.matrix, self.words, self.dict, window)
+
+        def read_text(self, file, encode):
                 f = open(file, encoding=encode)
                 text = f.read()
                 f.close()
 
                 return text
         
-        @staticmethod
-        def extract_words(text):
-                words = re.findall(r"\b\w+\b", text.lower())
+        def create_dict(self, words):
                 d =  dict.fromkeys(words)
                 index = 0
 
@@ -22,17 +30,14 @@ class Training():
                         d[key] = index
                 return d
 
-        def _create_matrix(dict):
+        def _create_matrix(self, dict):
                 size = len(dict)
                 ndarray = np.array(np.zeros((size, size)))
                 print(np.shape(ndarray))
 
                 return ndarray
         
-        @staticmethod
-        def fill_matrix_vector(text, dict, window):
-                matrix = Training._create_matrix(dict)
-                words = re.findall(r'\b\w+\b', text.lower())
+        def fill_matrix_vector(self, matrix, words, dict, window):
                 neighbors_qty = window//2
 
                 #on parcours chaque mot du texte
