@@ -78,6 +78,29 @@ class Training():
 
                 return matrix
 
+        def fill_matrix_vector_v2(self, matrix, words, dict, window):
+                neighbors_qty = window//2
+                n = len(words)
+
+                #on parcours chaque mot du texte
+                for i in range(n):
+                        #On trouve l'index de ce mot dans le dict
+                        index = dict[words[i]]
+                        #On trouve les voisins avant
+                        for offset in range(-neighbors_qty, neighbors_qty+1):
+                                #Empecher le outofbound
+                                if offset == 0:
+                                        continue
+
+                                j = i + offset
+
+                        #On trouve les voisins après
+                                if 0 <= j < n:
+                                        neighbor = words[j]
+                                        idx = dict[neighbor]
+                                        matrix[index, idx] += 1
+                return matrix
+
 
 
 
