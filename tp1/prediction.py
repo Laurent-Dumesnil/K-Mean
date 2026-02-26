@@ -5,17 +5,17 @@ class Prediction():
         self.word = word
         self.train = train
         if self.word not in self.train.dict:
-            raise ValueError("Le mot recherché n'est pas dans le texte")
+            raise ValueError("\nLe mot recherché n'est pas dans le texte")
         try:
             self.synonym_count = int(synonym_count)
             if self.synonym_count <= 0:
-                raise ValueError('Votre nombre de synonyme doit être plus grand que 1')
+                raise ValueError('\nVotre nombre de synonyme doit être plus grand que 1')
             elif self.synonym_count >= len(self.train.dict):
-                raise ValueError('Votre nombre de synonyme ne peut pas être plus grand que le nombre de mot du texte')
+                raise ValueError('\nVotre nombre de synonyme ne peut pas être plus grand que le nombre de mot du texte')
 
             self.method = int(method)
         except:
-            raise ValueError('Vous devez entrez un nombre entier comme deuxième et troisième paramètres')
+            raise ValueError('\nVous devez entrez un nombre entier comme deuxième et troisième paramètres')
 
         self.stop_words = ["le", "la", "les", "l", "un", "une", "des",
                             "mon", "ton", "son", "ma", "ta", "sa",
@@ -42,7 +42,7 @@ class Prediction():
             case 3:
                 self.result = self.city_block()
             case _:
-                raise ValueError('Votre méthode doit être inclus entre 1 et 3')
+                raise ValueError('\nVotre méthode doit être inclus entre 1 et 3')
 
     def dot_product(self):
         product_matrix = self.train.matrix[self.index_of_word]*self.train.matrix

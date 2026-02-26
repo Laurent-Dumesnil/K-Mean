@@ -7,12 +7,14 @@ class Training():
                 try:
                         self.text = self.read_text(file, encode)
                         self.words = re.findall(r"\b\w+\b", self.text.lower())
+                        self.window = int(window)
                 except Exception:
-                        print("Erreur lors de l'ouverture du fichier")
+                        print(f"\nErreur lors de l'ouverture du fichier. Vérifiez que votre fenêtre: {window}, que votre chemin: {file} et votre encodage: {encode} sont valides\n")
+                        quit()
 
                 self.dict = self.create_dict(self.words)
                 self.matrix = self._create_matrix(self.dict)
-                self.fill_matrix_vector(self.matrix, self.words, self.dict, window)
+                self.fill_matrix_vector(self.matrix, self.words, self.dict, self.window)
                 self.lookup_table = self.create_lookup_table()
 
         def create_lookup_table(self):
@@ -39,7 +41,6 @@ class Training():
         def _create_matrix(self, dict):
                 size = len(dict)
                 ndarray = np.array(np.zeros((size, size)))
-                print(np.shape(ndarray))
 
                 return ndarray
                 
