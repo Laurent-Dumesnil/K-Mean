@@ -4,13 +4,13 @@ class Prediction():
     def __init__(self, train, word, synonym_count, method):
         self.word = word
         self.train = train
-        if self.word not in self.train.dict:
+        if self.word not in self.train.word_dict:
             raise ValueError("\nLe mot recherché n'est pas dans le texte")
         try:
             self.synonym_count = int(synonym_count)
             if self.synonym_count <= 0:
                 raise ValueError('\nVotre nombre de synonyme doit être plus grand que 1')
-            elif self.synonym_count >= len(self.train.dict):
+            elif self.synonym_count >= len(self.train.word_dict):
                 raise ValueError('\nVotre nombre de synonyme ne peut pas être plus grand que le nombre de mot du texte')
 
             self.method = int(method)
@@ -32,7 +32,7 @@ class Prediction():
                             "celui", "celle", "ceux", "celles", "ceci", "cela", "ça"
                             ,"s","d","j","t","m","n","c","y","que","qu","qui"]
         
-        self.index_of_word = self.train.dict[self.word]
+        self.index_of_word = self.train.word_dict[self.word]
 
         match self.method:
             case 1:
@@ -45,21 +45,21 @@ class Prediction():
                 raise ValueError('\nVotre méthode doit être inclus entre 1 et 3')
 
     def dot_product(self):
-        product_matrix = self.train.matrix[self.index_of_word]*self.train.matrix
+        product_matrix = self.train.coocurence_matrix[self.index_of_word]*self.train.coocurence_matrix
         results = np.sum(product_matrix, axis=1)
 
         return self.build_results(results, False)
 
     def least_squares(self):
-        words_to_compare = self.train.matrix[self.index_of_word , :]
-        compared_words = (self.train.matrix[:] - words_to_compare) ** 2
+        words_to_compare = self.train.coocurence_matrix[self.index_of_word , :]
+        compared_words = (self.train.coocurence_matrix[:] - words_to_compare) ** 2
         results = np.sum(compared_words, axis=1)
 
         return self.build_results(results)
     
     def city_block(self):
-        words_to_compare = self.train.matrix[self.index_of_word, :]
-        compared_words = np.abs(self.train.matrix[:] - words_to_compare)
+        words_to_compare = self.train.coocurence_matrix[self.index_of_word, :]
+        compared_words = np.abs(self.train.coocurence_matrix[:] - words_to_compare)
         results = np.sum(compared_words, axis=1)
 
         return self.build_results(results)

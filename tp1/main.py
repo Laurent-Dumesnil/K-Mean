@@ -1,12 +1,15 @@
 from sys import argv
 from training import Training
 from prediction import Prediction
-from colorama import init, Fore, Style, Back
+from colorama import init, Fore, Style
 
 def main():
-    window = argv[1]
-    file = argv[2]
-    encode =  argv[3]
+    # window = argv[1]
+    # file = argv[2]
+    # encode =  argv[3]
+    window = 5
+    file = "C:/travail/GerminalUTF8.txt"
+    encode = "UTF-8"
 
     init(autoreset=True)
     
