@@ -7,7 +7,7 @@ def main():
     # window = argv[1]
     # file = argv[2]
     # encode =  argv[3]
-    window = 5
+    window = 10
     file = "C:/travail/GerminalUTF8.txt"
     encode = "UTF-8"
 
@@ -22,19 +22,19 @@ def main():
             print(f"\n{Fore.RED}AU REVOIR\n")
             return 0
         elif len(answers) != 3:
-            print('\nVous devez écrire selon ce pattern: "mot_recherché" "nombre_entier" "nombre_0_1_2"')
+            print('\nVous devez écrire selon ce pattern: "mot_recherché" "nombre entier" "nombre[1 à 3]"')
         else:
             try:
                 prediction.word = answers[0]
                 try:
-                    prediction.synonym_count = int(answers[1])
-                    prediction.method = int(answers[2])
-                    result = prediction.predict()
+                    synonym_count = int(answers[1])
+                    method = int(answers[2])
+                    result = prediction.predict(synonym_count, method)
                     print()
 
                     for key, value in result.items():
                         print(f'{Fore.LIGHTBLUE_EX}{key}{Style.RESET_ALL} --> {Fore.GREEN}{value}')
-                except TypeError:
+                except ValueError:
                     print('\nVous devez entrez un nombre entier comme deuxième et troisième paramètres')
             except ValueError as e:
                 print(e)
