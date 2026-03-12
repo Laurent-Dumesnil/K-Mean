@@ -1,7 +1,7 @@
 from sys import argv
 from time import perf_counter
 from traceback import print_exc
-from entrainer import Entrainer
+from entrainerBD import EntrainerBD
 from predire import Predire
 
 PRINT_TIME = 1
@@ -18,7 +18,7 @@ Tapez {QUITTER} pour quitter.
 """
 
 
-def demande_utilisateur(cerveau: Entrainer, verbose: int) -> None:
+def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
     reponse = input(INVITE)
     while reponse != QUITTER:
         try:
@@ -47,7 +47,7 @@ def main() -> int:
         else:
             verbose = 0
 
-        cerveau = Entrainer(taille_fenetre)
+        cerveau = EntrainerBD(taille_fenetre)
         t = perf_counter()
         cerveau.entraine(chemin, encodage)
         if verbose >= PRINT_TIME:
