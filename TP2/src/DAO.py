@@ -1,14 +1,13 @@
 import sqlite3
+from abc import ABC
 
-class DatabaseConnection():
-    @staticmethod
-    def get_connection():
+class DatabaseConnection(ABC):
+    def get_connection(self):
         connexion = sqlite3.connect("ai2.db")
         return connexion
     
-    @staticmethod
-    def create_table():
-        connexion = DatabaseConnection.get_connection()
+    def create_table(self):
+        connexion = self.get_connection()
         cursor = connexion.cursor()
         cursor.execute('PRAGMA foreign_keys = 1')
         cursor.execute('''
@@ -21,19 +20,20 @@ class DatabaseConnection():
         connexion.commit()
         connexion.close()
 
-class DataManager():
-    @staticmethod
-    def add_words(datas:dict):
+class DataManager(DatabaseConnection):
+    def __init__(self):
+        self.create_table()
+
+    def add_words(self, datas:dict):
         if isinstance(datas, dict):
-            connexion = DatabaseConnection.get_connection()
+            connexion = self.get_connection()
             cursor = connexion.cursor()
-            cursor.executemany('INSERT INTO words (word, idx) VALUES(?, ?)', datas.items())
+            cursor.executemany('INSERT INTO words (word, idx) VALUES(?, ?)',  [(mot, idx) for mot,idx in datas.items()])
             connexion.commit()
             connexion.close()
 
-    @staticmethod
-    def get_words():
-        connexion = DatabaseConnection.get_connection()
+    def get_words(self):
+        connexion = self.get_connection()
         cursor = connexion.cursor()
         cursor.execute('SELECT * FROM words')
         result = cursor.fetchall()
