@@ -3,6 +3,7 @@ from time import perf_counter
 from traceback import print_exc
 from entrainerBD import EntrainerBD
 from predire import Predire
+from parser import Parser
 
 PRINT_TIME = 1
 PRINT_ALL = 2
@@ -16,7 +17,6 @@ i.e. produit scalaire: 0, least-squares: 1, city-block: 2
 Tapez {QUITTER} pour quitter.
 
 """
-
 
 def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
     reponse = input(INVITE)
