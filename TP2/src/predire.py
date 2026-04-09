@@ -16,6 +16,8 @@ class Predire():
 
     @staticmethod
     def prediction(cerveau: Entrainer, mot_recherche: str, nb: int, methode: int) -> list[tuple[str, np.float64]]:
+        print(cerveau.vocabulaire)
+        
         if mot_recherche not in cerveau.vocabulaire:
             raise Exception(f'"{mot_recherche}" n\'est pas dans le vocabulaire.')
         

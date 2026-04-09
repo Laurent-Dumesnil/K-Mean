@@ -31,8 +31,8 @@ class EntrainerBD(Entrainer):
 
     def charger_bd(self:Self) -> None:
         super().init_vocabulaire()
-        super().init_cooccurrences()
         self.charger_mots()
+        super().init_cooccurrences()
         self.charger_coocurences()
         
 
@@ -48,6 +48,7 @@ class EntrainerBD(Entrainer):
             self.old_matrice[row][col] = val
             self.old_matrice[col][row] = val
         self._matrice = self.old_matrice.copy()
+
 
 
     def ajouter_coo_bd(self:Self) -> None:
