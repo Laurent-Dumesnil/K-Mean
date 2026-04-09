@@ -5,7 +5,6 @@ class DatabaseConnection():
         self.__connection = None
         self.__cursor = None
         self.__db_name = db_name
-        self.create_table()
 
     @property
     def connection(self):
@@ -18,6 +17,7 @@ class DatabaseConnection():
     def __enter__(self):
         self.__connection = sqlite3.connect(self.__db_name)
         self.__cursor = self.__connection.cursor()
+        self.__cursor.execute('PRAGMA foreign_keys = 1')
         return self
     
     def __exit__(self, exc_type, exc_value, exc_tb):
@@ -31,12 +31,55 @@ class DatabaseConnection():
             self.__connection = None
             self.__cursor = None
 
+class DatabaseService():
+    def add_words(self, datas:dict):
+        if isinstance(datas, dict):
+            try:
+                with DatabaseConnection() as db:
+                    db.cursor.executemany('INSERT INTO words (word, idx) VALUES(?, ?)',  datas.items())
+            except Exception as e:
+                print(e)
+
+    def get_words(self):
+        try:
+            with DatabaseConnection() as db:
+                db.cursor.execute('SELECT * FROM words')
+                results = db.cursor.fetchall()
+                return results
+        except Exception as e:
+            print(e)
+    
+    def get_coocurence(self, window_size):
+        try:
+            with DatabaseConnection() as db:
+                db.cursor.execute('SELECT word_1, word_2, coocurence_value FROM coocurence WHERE window_size = ?', (window_size,))
+                results = db.cursor.fetchall()
+                return results
+        except Exception as e:
+            print(e)
+    
+    def add_coocurence(self, datas:list):
+        if isinstance(datas, list):
+            try:
+                with DatabaseConnection() as db:
+                    db.cursor.executemany('INSERT OR REPLACE INTO coocurence (word_1, word_2, window_size, coocurence_value) VALUES(?, ?, ?, ?)', [(word_1, word_2, window, value) for word_1, word_2, window, value in datas])
+            except Exception as e:
+                print(e)
+
+    def delete_from(self):
+        try:
+            with DatabaseConnection() as db:
+                db.cursor.execute("DELETE FROM coocurence IF EXISTS")
+                db.cursor.execute("DELETE FROM words IF EXISTS")
+        except Exception as e:
+            print(e)
+
     def create_table(self):
         try:
-            with self as db:
-                db.cursor.execute('PRAGMA foreign_keys = 1')
+            with DatabaseConnection() as db:
                 db.cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS words
+                    DROP TABLE words IF EXISTS
+                    CREATE TABLE words
                 (
                     word TEXT PRIMARY KEY NOT NULL,
                     idx INTEGER UNIQUE NOT NULL
@@ -44,7 +87,8 @@ class DatabaseConnection():
                 ''')
 
                 db.cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS coocurence
+                    DROP TABLE coocurence IF EXISTS
+                    CREATE TABLE coocurence
                 (
                     word_1 INTEGER NOT NULL,
                     word_2 INTEGER NOT NULL,
@@ -55,51 +99,5 @@ class DatabaseConnection():
                     FOREIGN KEY (word_2) REFERENCES words(word)
                 )
                 ''')
-        except Exception as e:
-            print(e)
-
-class DatabaseService():
-    def __init__(self):
-        self.__db = DatabaseConnection("ai_db")
-
-    def add_words(self, datas:dict):
-        if isinstance(datas, dict):
-            try:
-                with self.__db as db:
-                    db.cursor.executemany('INSERT INTO words (word, idx) VALUES(?, ?)',  datas.items())
-            except Exception as e:
-                print(e)
-
-    def get_words(self):
-        try:
-            with self.__db as db:
-                db.cursor.execute('SELECT * FROM words')
-                results = db.cursor.fetchall()
-                return results
-        except Exception as e:
-            print(e)
-    
-    def get_coocurence(self, window_size):
-        try:
-            with self.__db as db:
-                db.cursor.execute('SELECT word_1, word_2, coocurence_value FROM coocurence WHERE window_size = ?', (window_size,))
-                results = db.cursor.fetchall()
-                return results
-        except Exception as e:
-            print(e)
-    
-    def add_coocurence(self, datas:list):
-        if isinstance(datas, list):
-            try:
-                with self.__db as db:
-                    db.cursor.executemany('INSERT OR REPLACE INTO coocurence (word_1, word_2, window_size, coocurence_value) VALUES(?, ?, ?, ?)', [(word_1, word_2, window, value) for word_1, word_2, window, value in datas])
-            except Exception as e:
-                print(e)
-
-    def delete_from(self):
-        try:
-            with self.__db as db:
-                db.cursor.execute("DELETE FROM coocurence")
-                db.cursor.execute("DELETE FROM words")
         except Exception as e:
             print(e)
