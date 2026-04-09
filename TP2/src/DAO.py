@@ -66,25 +66,17 @@ class DatabaseService():
             except Exception as e:
                 print(e)
 
-    def delete_from(self):
-        try:
-            with DatabaseConnection() as db:
-                db.cursor.execute("DELETE FROM coocurence")
-                db.cursor.execute("DELETE FROM words")
-        except Exception as e:
-            print(e)
-
     def create_table(self):
         try:
             with DatabaseConnection() as db:
-                db.cursor.execute("DROP TABLE IF EXISTS cooccurence")
+                db.cursor.execute("DROP TABLE IF EXISTS coocurence")
                 db.cursor.execute("DROP TABLE IF EXISTS words")
                 db.cursor.execute('''
                     
                     CREATE TABLE words
                 (
-                    word TEXT PRIMARY KEY NOT NULL,
-                    idx INTEGER UNIQUE NOT NULL
+                    word TEXT UNIQUE NOT NULL,
+                    idx INTEGER PRIMARY KEY NOT NULL
                 )
                 ''')
 
@@ -97,8 +89,8 @@ class DatabaseService():
                     window_size INTEGER NOT NULL,
                     coocurence_value INTEGER NOT NULL,
                     PRIMARY KEY (word_1, word_2, window_size),
-                    FOREIGN KEY (word_1) REFERENCES words(word),
-                    FOREIGN KEY (word_2) REFERENCES words(word)
+                    FOREIGN KEY (word_1) REFERENCES words(idx),
+                    FOREIGN KEY (word_2) REFERENCES words(idx)
                 )
                 ''')
         except Exception as e:

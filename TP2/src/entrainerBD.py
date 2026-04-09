@@ -10,32 +10,45 @@ class EntrainerBD(Entrainer):
 
     @override
     def indexer_vocabulaire(self:Self) -> None:
-        mots_db = self.db.get_words()
-        for mot, idx in mots_db:
-            self.vocabulaire[mot] = idx
+        self.charger_mots()
         mots_a_ajouter = {}
         for mot in self._texte:
-            if mot not in self._vocabulaire:
-                self._vocabulaire[mot] = len(self.vocabulaire)
+            if mot not in self.vocabulaire:
+                self.vocabulaire[mot] = len(self.vocabulaire)
                 mots_a_ajouter[mot] = len(self.vocabulaire) -1
 
-        print(self.vocabulaire)
         self.db.add_words(mots_a_ajouter)
 
     @override
     def init_cooccurrences(self:Self) -> None:
         super().init_cooccurrences()
-        self.old_matrice = self._matrice.copy()
-        coo_db = self.db.get_coocurence(self.taille_fenetre)
-        for rangee in coo_db:
-            self.old_matrice[rangee[0]][rangee[1]] = rangee[2]
-        self._matrice = self.old_matrice.copy()
+        self.charger_coocurences()
 
     @override
-    def compter_cooccurrences(self:Self)-> None:
+    def compter_cooccurrences(self:Self) -> None:
         super().compter_cooccurrences()
-        print(self.matrice)
         self.ajouter_coo_bd()
+
+    def charger_bd(self:Self) -> None:
+        super().init_vocabulaire()
+        super().init_cooccurrences()
+        self.charger_mots()
+        self.charger_coocurences()
+        
+
+    def charger_mots(self:Self) -> None:
+        mots_db = self.db.get_words()
+        for mot, idx in mots_db:
+            self.vocabulaire[mot] = idx
+    
+    def charger_coocurences(self:Self) -> None:
+        self.old_matrice = self._matrice.copy()
+        coo_db = self.db.get_coocurence(self.taille_fenetre)
+        for row,col,val in coo_db:
+            self.old_matrice[row][col] = val
+            self.old_matrice[col][row] = val
+        self._matrice = self.old_matrice.copy()
+
 
     def ajouter_coo_bd(self:Self) -> None:
         coo_a_ajouter = self._matrice - self.old_matrice

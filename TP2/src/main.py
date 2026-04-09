@@ -61,7 +61,8 @@ def main() -> int:
             print(cerveau)
 
         if args.p:
-            demande_utilisateur(cerveau)
+            cerveau.charger_bd()
+            demande_utilisateur(cerveau, args.v)
 
     except ValueError as ve:
         print(ve)
