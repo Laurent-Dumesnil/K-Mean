@@ -4,21 +4,22 @@ from typing import override, Self
 import numpy as np
 
 class EntrainerBD(Entrainer):
-    def __init__(self:Self, taille_fenetre: int):
+    def __init__(self:Self, taille_fenetre: int, db:DatabaseService):
         super().__init__(taille_fenetre)
-        self.db = DatabaseService()
+        self.db = db
 
     @override
     def indexer_vocabulaire(self:Self) -> None:
         mots_db = self.db.get_words()
-        for rangee in mots_db:
-            self.vocabulaire[rangee[0]] = rangee[1] -1
+        for mot, idx in mots_db:
+            self.vocabulaire[mot] = idx
         mots_a_ajouter = {}
         for mot in self._texte:
             if mot not in self._vocabulaire:
                 self._vocabulaire[mot] = len(self.vocabulaire)
-                mots_a_ajouter[mot] = len(self.vocabulaire)
+                mots_a_ajouter[mot] = len(self.vocabulaire) -1
 
+        print(self.vocabulaire)
         self.db.add_words(mots_a_ajouter)
 
     @override
@@ -33,6 +34,7 @@ class EntrainerBD(Entrainer):
     @override
     def compter_cooccurrences(self:Self)-> None:
         super().compter_cooccurrences()
+        print(self.matrice)
         self.ajouter_coo_bd()
 
     def ajouter_coo_bd(self:Self) -> None:
@@ -41,8 +43,10 @@ class EntrainerBD(Entrainer):
         inverse = np.sort(indices, axis=1)
         index_sans_doublons = np.unique(inverse, axis=0)
         list_a_ajouter = []
-        for i in range(np.size(index_sans_doublons, axis = 0)):
-            list_a_ajouter.append([int(index_sans_doublons[i][0]),int(index_sans_doublons[i][1]), self.taille_fenetre, int(self.matrice[index_sans_doublons[i][0]][index_sans_doublons[i][1]])])
+        for i in index_sans_doublons:
+            list_a_ajouter.append([int(i[0]), int(i[1]), self.taille_fenetre, int(self.matrice[i[0]][i[1]])])
 
         self.db.add_coocurence(list_a_ajouter)
 
+if __name__ == "__main__":
+    EntrainerBD(7).entraine("C:/travail/C62_ProulxJeremie_DumesnilLaurent_LamontagneJulien/TP2/doc/AmisTest.txt","UTF-8")
