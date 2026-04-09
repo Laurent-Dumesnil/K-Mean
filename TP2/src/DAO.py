@@ -1,10 +1,10 @@
 import sqlite3
 
 class DatabaseConnection():
-    def __init__(self, db_name):
+    def __init__(self):
         self.__connection = None
         self.__cursor = None
-        self.__db_name = db_name
+        self.__db_name = "ai_db"
 
     @property
     def connection(self):
@@ -69,16 +69,18 @@ class DatabaseService():
     def delete_from(self):
         try:
             with DatabaseConnection() as db:
-                db.cursor.execute("DELETE FROM coocurence IF EXISTS")
-                db.cursor.execute("DELETE FROM words IF EXISTS")
+                db.cursor.execute("DELETE FROM coocurence")
+                db.cursor.execute("DELETE FROM words")
         except Exception as e:
             print(e)
 
     def create_table(self):
         try:
             with DatabaseConnection() as db:
+                db.cursor.execute("DROP TABLE IF EXISTS cooccurence")
+                db.cursor.execute("DROP TABLE IF EXISTS words")
                 db.cursor.execute('''
-                    DROP TABLE words IF EXISTS
+                    
                     CREATE TABLE words
                 (
                     word TEXT PRIMARY KEY NOT NULL,
@@ -87,7 +89,7 @@ class DatabaseService():
                 ''')
 
                 db.cursor.execute('''
-                    DROP TABLE coocurence IF EXISTS
+                    
                     CREATE TABLE coocurence
                 (
                     word_1 INTEGER NOT NULL,
