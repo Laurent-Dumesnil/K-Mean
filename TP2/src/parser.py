@@ -12,7 +12,6 @@ class Parser():
         group_modes.add_argument('-p', action='store_true', help='Prédire les synonymes')
         group_modes.add_argument('-b', action='store_true', help='Regénérer la BD')
 
-
         group_entrainement  = self.parser.add_argument_group('Entrainement')
         group_entrainement.add_argument('-t', type=int, help='Sélection de la taille de la fenêtre')
         group_entrainement.add_argument('--encodage', help="Sélection du type d'encodage du texte")
@@ -20,28 +19,33 @@ class Parser():
 
         self.parser.add_argument('-v', type=int, default=0, help='Niveau de verbosité')
 
+
+#valider sur la taille de la fenetre > 0
+#valide sur chemin et encodage
+
     def parse(self):
         args = self.parser.parse_args()
         self._validate(args)
         return args
     
     def _validate(self, args):
-        if args.e:
-            missing = []
-            if args.t is None:
-                missing.append("-t")
-            if args.encodage is None:
-                missing.append("--encodage")
-            if args.chemin is None:
-                missing.append("--chemin")
+
+        requirements = {
+            'e': ['t','encodage', 'chemin'],
+            'p': ['t'],
+            'b':[]
+        }
+        mode = next((mode for mode in requirements if getattr(args, mode)), None)
+        if mode :
+            if args.t is not None and args.t <= 0:
+                self.parser.error('\nLa taille de la fenêtre doit être plus grand que 0')
             
+            if args.chemin:
+            
+            if args.encodage
+            missing = [f'--{req}' if len(req) > 1 else f'-{req}'
+                       for req in requirements[mode]
+                       if getattr(args, req) is None
+                       ]
             if missing:
-                self.parser.error(f"L'option -e requiert aussi : {', '.join(missing)}")
-
-        elif args.p:
-            missing = []
-            if args.t is None:
-                missing.append("-t")
-
-            if missing:
-                    self.parser.error(f"L'option -p requiert aussi : -t")
+                self.parser.error(f"L'option {mode} requiert aussi : {', '.join(missing)}")

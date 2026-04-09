@@ -95,3 +95,11 @@ class DatabaseService():
                     db.cursor.executemany('INSERT OR REPLACE INTO coocurence (word_1, word_2, window_size, coocurence_value) VALUES(?, ?, ?, ?)', [(word_1, word_2, window, value) for word_1, word_2, window, value in datas])
             except Exception as e:
                 print(e)
+
+    def delete_from(self):
+        try:
+            with self.__db as db:
+                db.cursor.execute("DELETE FROM coocurence")
+                db.cursor.execute("DELETE FROM words")
+        except Exception as e:
+            print(e)

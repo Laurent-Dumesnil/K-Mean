@@ -4,6 +4,7 @@ from traceback import print_exc
 from entrainerBD import EntrainerBD
 from predire import Predire
 from parser import Parser
+import os
 
 PRINT_TIME = 1
 PRINT_ALL = 2
@@ -37,24 +38,28 @@ def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
             print(e)
         reponse = input(INVITE)
 
+
 def main() -> int:
+    p = Parser()
+    args = p.parse()
     
     try:
-        taille_fenetre = int(argv[1])
-        encodage, chemin = argv[2:4]
-        if len(argv) > 4:
-            verbose = int(argv[4])
-        else:
-            verbose = 0
+        cerveau = EntrainerBD(args.t)
+        if args.e:
+            t = perf_counter()
+            cerveau.entraine(args.chemin, args.encodage)
+        
+        if args.b:
+            if os.path.exists('ai2.db'):  
+                cerveau.db.delete_from()
 
-        cerveau = EntrainerBD(taille_fenetre)
-        t = perf_counter()
-        cerveau.entraine(chemin, encodage)
-        if verbose >= PRINT_TIME:
+        if args.v >= PRINT_TIME:
             print(f'Entraînement effectué en {perf_counter() - t:.2f} secondes.')
-            if verbose >= PRINT_ALL:
-                print(cerveau)
-        demande_utilisateur(cerveau, verbose)
+        if args.v >= PRINT_ALL:
+            print(cerveau)
+
+        if args.p:
+            demande_utilisateur(cerveau)
 
     except ValueError as ve:
         print(ve)
