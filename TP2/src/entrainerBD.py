@@ -1,12 +1,12 @@
 from entrainer import Entrainer
-from DAO import DataManager
+from DAO import DatabaseService
 from typing import override, Self
 import numpy as np
 
 class EntrainerBD(Entrainer):
     def __init__(self:Self, taille_fenetre: int):
         super().__init__(taille_fenetre)
-        self.db:DataManager = DataManager()
+        self.db = DatabaseService()
 
     @override
     def indexer_vocabulaire(self:Self) -> None:
