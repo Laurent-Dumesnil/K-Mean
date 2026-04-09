@@ -4,6 +4,7 @@ from traceback import print_exc
 from entrainerBD import EntrainerBD
 from predire import Predire
 from parser import Parser
+from DAO import DatabaseService
 import os
 
 PRINT_TIME = 1
@@ -42,16 +43,17 @@ def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
 def main() -> int:
     p = Parser()
     args = p.parse()
+
+    s = DatabaseService()
     
     try:
-        cerveau = EntrainerBD(args.t)
+        cerveau = EntrainerBD(args.t, s)
         if args.e:
             t = perf_counter()
             cerveau.entraine(args.chemin, args.encodage)
         
         if args.b:
-            if os.path.exists('ai2.db'):  
-                cerveau.db.delete_from()
+            s.create_table()
 
         if args.v >= PRINT_TIME:
             print(f'Entraînement effectué en {perf_counter() - t:.2f} secondes.')

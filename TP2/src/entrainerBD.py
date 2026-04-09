@@ -49,4 +49,4 @@ class EntrainerBD(Entrainer):
         self.db.add_coocurence(list_a_ajouter)
 
 if __name__ == "__main__":
-    EntrainerBD(7).entraine("C:/travail/C62_ProulxJeremie_DumesnilLaurent_LamontagneJulien/TP2/doc/AmisTest.txt","UTF-8")
+    EntrainerBD(7, DatabaseService()).entraine("C:/travail/C62_ProulxJeremie_DumesnilLaurent_LamontagneJulien/TP2/doc/AmisTest.txt","UTF-8")

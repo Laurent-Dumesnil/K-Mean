@@ -1,4 +1,5 @@
 import argparse
+import os
 
 class Parser():
     def __init__(self):
@@ -41,8 +42,14 @@ class Parser():
                 self.parser.error('\nLa taille de la fenêtre doit être plus grand que 0')
             
             if args.chemin:
-            
-            if args.encodage
+                if not os.path.isfile(args.chemin):
+                    self.parser.error("\nLe chemin n'est pas valide")
+                
+                try:
+                    _ = open(args.chemin, encoding=args.encodage)
+                except:
+                    self.parser.error("\nL'encodage sélectionné n'est pas valide")
+
             missing = [f'--{req}' if len(req) > 1 else f'-{req}'
                        for req in requirements[mode]
                        if getattr(args, req) is None
