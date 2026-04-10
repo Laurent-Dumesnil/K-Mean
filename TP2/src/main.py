@@ -39,7 +39,6 @@ def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
             print(e)
         reponse = input(INVITE)
 
-
 def main() -> int:
     p = Parser()
     args = p.parse()
@@ -48,21 +47,26 @@ def main() -> int:
     
     try:
         cerveau = EntrainerBD(args.t, s)
+        t = perf_counter()
+        
         if args.e:
-            t = perf_counter()
             cerveau.entraine(args.chemin, args.encodage)
         
         if args.b:
             s.create_table()
 
-        if args.v >= PRINT_TIME:
-            print(f'Entraînement effectué en {perf_counter() - t:.2f} secondes.')
-        if args.v >= PRINT_ALL:
-            print(cerveau)
-
         if args.p:
             cerveau.charger_bd()
             demande_utilisateur(cerveau, args.v)
+
+        if args.v >= PRINT_TIME:
+            print(f'Opération effectuée en {perf_counter() - t:.2f} secondes.')
+        
+        if args.v >= PRINT_ALL:
+            if hasattr(cerveau,'_vocabulaire') and cerveau._vocabulaire:
+                print(cerveau)
+            else:
+                print('La base de donnée est vide.')
 
     except ValueError as ve:
         print(ve)

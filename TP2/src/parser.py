@@ -18,11 +18,7 @@ class Parser():
         group_entrainement.add_argument('--encodage', help="Sélection du type d'encodage du texte")
         group_entrainement.add_argument('--chemin', help='Sélection du chemin pour accéder au texte à analyser')
 
-        self.parser.add_argument('-v', type=int, default=0, help='Niveau de verbosité')
-
-
-#valider sur la taille de la fenetre > 0
-#valide sur chemin et encodage
+        self.parser.add_argument('-v', type=int, nargs='?', const=0, default=0, help='Niveau de verbosité (0, 1 ou 2)')
 
     def parse(self):
         args = self.parser.parse_args()
