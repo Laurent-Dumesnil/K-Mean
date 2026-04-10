@@ -36,7 +36,7 @@ class DatabaseService():
         if isinstance(datas, dict):
             try:
                 with DatabaseConnection() as db:
-                    db.cursor.executemany('INSERT INTO words (word, idx) VALUES(?, ?)',  datas.items())
+                    db.cursor.executemany('INSERT OR IGNORE INTO words (word, idx) VALUES(?, ?)',  datas.items())
             except Exception as e:
                 print(e)
 

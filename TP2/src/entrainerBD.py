@@ -15,7 +15,7 @@ class EntrainerBD(Entrainer):
         for mot in self._texte:
             if mot not in self.vocabulaire:
                 self.vocabulaire[mot] = len(self.vocabulaire)
-                mots_a_ajouter[mot] = len(self.vocabulaire) -1
+                mots_a_ajouter[mot] = self.vocabulaire[mot]
 
         self.db.add_words(mots_a_ajouter)
 

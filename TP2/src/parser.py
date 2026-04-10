@@ -51,4 +51,4 @@ class Parser():
                        if getattr(args, req) is None
                        ]
             if missing:
-                self.parser.error(f"L'option {mode} requiert aussi : {', '.join(missing)}")
+                self.parser.error(f"\nL'option {mode} requiert aussi : {', '.join(missing)}")
