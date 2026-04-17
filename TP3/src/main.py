@@ -40,6 +40,9 @@ def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
             print(e)
         reponse = input(INVITE)
 
+def afficher_cluster(results:list[tuple[str, float]]):
+    pass
+
 def main() -> int:
     p = Parser()
     args = p.parse()
@@ -64,7 +67,7 @@ def main() -> int:
         if args.c:
             cerveau.charger_bd()
             c  = Cluster(args.k, args.n, cerveau)
-            c.partitionne()
+            afficher_cluster(c.partitionne())
 
         if args.v >= PRINT_TIME:
             print(f'Opération effectuée en {perf_counter() - t:.2f} secondes.')
