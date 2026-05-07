@@ -41,7 +41,10 @@ def demande_utilisateur(cerveau: EntrainerBD, verbose: int) -> None:
         reponse = input(INVITE)
 
 def afficher_cluster(results:list[tuple[str, float]]):
-    pass
+    for i in range(len(results)):
+        print(f'\nPartition {i}:')
+        for word, score in results[i]:
+            print(f'        {word} -> {score}')
 
 def main() -> int:
     p = Parser()
