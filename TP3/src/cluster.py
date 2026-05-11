@@ -4,17 +4,25 @@ from entrainer import Entrainer
 from time import perf_counter
 
 class Cluster():
-    def __init__(self, k:int, n:int, cerveau:Entrainer):
+    def __init__(self, k:int, n:int, cerveau:Entrainer, normalize:bool=False):
         self.k=k
         self.n=n
         self.cerveau = cerveau
+
+        self.normalize = normalize
+
+        self.matrice_norm = self.cerveau.matrice.copy().astype(np.float64)
+
+        #test normalize
+        if self.normalize:
+            normes = np.linalg.norm(self.matrice_norm, axis=1, keepdims=True)
+            self.matrice_norm /= normes
 
     def partitionne(self) -> None:
         self.initialiser_matrice()
         self.positionner_centroides()
         historique_migrations = self.remplir_matrice_comparaison()
 
-        #Tentative pour gérer la création du graphe.
         return self.formatter_resultat(), historique_migrations
 
     def initialiser_matrice(self) -> None:
