@@ -35,7 +35,6 @@ class Cluster():
             self.old_matrice_comparaison = self.matrice_comparaison.copy()
 
             nb_migration = np.sum(self.matrice_comparaison != self.old_matrice_comparaison)
-            historique.append(int(nb_migration))
 
             for i in range(len(self.cerveau.matrice)):
                 distances = [ls(self.cerveau.matrice[i],c) for c in self.matrice_centroide]
@@ -44,6 +43,8 @@ class Cluster():
 
             nb_migration = np.sum(self.matrice_comparaison != self.old_matrice_comparaison)
 
+            historique.append(int(nb_migration))
+            
             self.nb_iter += 1
             self.print_iter(t, nb_migration)
             self.update_centroide()

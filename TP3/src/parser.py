@@ -24,7 +24,11 @@ class Parser():
         group_cluster = self.parser.add_argument_group('Cluster')
         group_cluster.add_argument('-k', type=int, help='Sélection du nombre de cluster')
         group_cluster.add_argument('-n', type=int, help='Nombre de mots à afficher par cluster')
-
+        group_cluster.add_argument('--graphe', action='store_true', help="Génère un graphique représentant le nombre de migrations en fonction du nombre d'itérations")
+        group_cluster.add_argument('--normaliser', action='store_true', help="Normalisation des données")
+        group_cluster.add_argument('--conserver', type=int, help="Permet de conserver les x nombre de colonnes (features) les plus représentées")
+    
+    
     def parse(self):
         args = self.parser.parse_args()
         self._validate(args)
