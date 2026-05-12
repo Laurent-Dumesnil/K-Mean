@@ -20,13 +20,13 @@ class Parser():
         group_entrainement.add_argument('--chemin', help='Sélection du chemin pour accéder au texte à analyser')
 
         self.parser.add_argument('-v', type=int, nargs='?', const=0, default=0, help='Niveau de verbosité (0, 1 ou 2)')
+        self.parser.add_argument('--normaliser', action='store_true', help="Normalisation des données")
+        self.parser.add_argument('--conserver', type=int, help="Permet de conserver les x nombre de colonnes (features) les plus représentées")
 
         group_cluster = self.parser.add_argument_group('Cluster')
         group_cluster.add_argument('-k', type=int, help='Sélection du nombre de cluster')
         group_cluster.add_argument('-n', type=int, help='Nombre de mots à afficher par cluster')
         group_cluster.add_argument('--graphe', action='store_true', help="Génère un graphique représentant le nombre de migrations en fonction du nombre d'itérations")
-        group_cluster.add_argument('--normaliser', action='store_true', help="Normalisation des données")
-        group_cluster.add_argument('--conserver', type=int, help="Permet de conserver les x nombre de colonnes (features) les plus représentées")
     
     
     def parse(self):
@@ -61,6 +61,9 @@ class Parser():
 
             if args.n is not None and args.n <=0:
                 self.parser.error('\nLe nombre de mot à afficher par cluster doit être plus grand que 0.')
+
+            if args.conserver is not None and args.conserver < 0:
+                self.parser.error('\nLe nombre de colonnes à conserver doit être plus grand que 0.')
 
             missing = [f'--{req}' if len(req) > 1 else f'-{req}'
                        for req in requirements[mode]

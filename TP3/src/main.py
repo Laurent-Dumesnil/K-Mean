@@ -74,11 +74,12 @@ def main() -> int:
             s.create_table()
 
         if args.p:
-            cerveau.charger_bd()
+            #Possible d'avoir la normalisation / conservation au momement du chargement de la bd et non dans le clustering! 
+            cerveau.charger_bd(conserver=args.conserver, normaliser=args.normaliser)
             demande_utilisateur(cerveau, args.v)
 
         if args.c:
-            cerveau.charger_bd()
+            cerveau.charger_bd(conserver=args.conserver, normaliser=args.normaliser)
             c  = Cluster(args.k, args.n, cerveau)
             clusters, historique = c.partitionne()
             

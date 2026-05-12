@@ -29,11 +29,22 @@ class EntrainerBD(Entrainer):
         super().compter_cooccurrences()
         self.ajouter_coo_bd()
 
-    def charger_bd(self:Self) -> None:
+    def charger_bd(self:Self, conserver:int, normaliser:bool = False) -> None:
         super().init_vocabulaire()
         self.charger_mots()
         super().init_cooccurrences()
         self.charger_coocurences()
+        if conserver is not None and conserver > 0:
+            conserve_matrix = self._matrice
+            sommes = np.sum(self._matrice, axis=0)
+            indexes = np.argsort(sommes)[::-1][:conserver]
+            self._matrice = np.zeros((len(conserve_matrix), conserver))
+
+            self._matrice[:] = conserve_matrix[:,indexes][:]
+
+        if normaliser:
+            normes = np.linalg.norm(self._matrice, axis=1, keepdims=True)
+            self._matrice /= normes
         
 
     def charger_mots(self:Self) -> None:
@@ -47,7 +58,8 @@ class EntrainerBD(Entrainer):
         for row,col,val in coo_db:
             self.old_matrice[row][col] = val
             self.old_matrice[col][row] = val
-        self._matrice = self.old_matrice.copy()
+        #self._matrice = self.old_matrice.copy()
+        self._matrice = self.old_matrice
 
 
 

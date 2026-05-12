@@ -4,20 +4,123 @@
     // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
-           "name": "Python: Debug Cluster",
+            "name": "Reset bd",
             "type": "debugpy",
             "request": "launch",
             "program": "TP3/src/main.py",
             "console": "integratedTerminal",
             "args": [
-                "-c", 
-                "-t", "5", 
-                "-k", "5", 
-                "-n", "10", 
-                "--graphe"
+                "-b",
             ]
-        }
+        },
+        {
+            "name": "Train Germinal",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-e",
+                "-t","5",
+                "--encodage","UTF-8",
+                "--chemin", "TP3/doc/GerminalUTF8.txt"
+            ]
+        },
+        {
+            "name": "Train Ventre Paris",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-e",
+                "-t","5",
+                "--encodage","UTF-8",
+                "--chemin", "TP3/doc/LeVentreDeParisUTF8.txt"
+            ]
+        },
+        {
+            "name": "Train Trois Mousquetaire",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-e",
+                "-t","5",
+                "--encodage","UTF-8",
+                "--chemin", "TP3/doc/LesTroisMousquetairesUTF8.txt"
+            ]
+        },
+        {
+            "name": "Train DonQuichotte",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-e",
+                "-t","5",
+                "--encodage","UTF-8",
+                "--chemin", "TP3/doc/DonQuichotteUTF8.txt"
+            ]
+        },
+        {
+            "name": "Cluster",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-c",
+                "-t","5",
+                "-k","5",
+                "-n","10"
+            ]
+        },
+        {
+            "name": "Cluster normaliser",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-c",
+                "-t","5",
+                "-k","5",
+                "-n","10",
+                "--normaliser"
+            ]
+        },
+        {
+            "name": "Cluster conserver 2000",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-c",
+                "-t","5",
+                "-k","5",
+                "-n","10",
+                "--conserver","2000"
+            ]
+        },
+        {
+            "name": "Cluster normaliser conserver 2000",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "TP3/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-c",
+                "-t","5",
+                "-k","5",
+                "-n","10",
+                "--normaliser",
+                "--conserver","2000"
+            ]
+        },
     ]
 }

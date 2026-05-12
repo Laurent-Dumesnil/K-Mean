@@ -4,19 +4,12 @@ from entrainer import Entrainer
 from time import perf_counter
 
 class Cluster():
-    def __init__(self, k:int, n:int, cerveau:Entrainer, normalize:bool=False):
+    def __init__(self, k:int, n:int, cerveau:Entrainer):
         self.k=k
         self.n=n
         self.cerveau = cerveau
 
-        self.normalize = normalize
-
-        self.matrice_norm = self.cerveau.matrice.copy().astype(np.float64)
-
-        #test normalize
-        if self.normalize:
-            normes = np.linalg.norm(self.matrice_norm, axis=1, keepdims=True)
-            self.matrice_norm /= normes
+        self.matrice = self.cerveau.matrice 
 
     def partitionne(self) -> None:
         self.initialiser_matrice()
@@ -26,11 +19,11 @@ class Cluster():
         return self.formatter_resultat(), historique_migrations
 
     def initialiser_matrice(self) -> None:
-        self.matrice_comparaison = np.full(self.cerveau.matrice.shape[0], -1)
+        self.matrice_comparaison = np.full(self.matrice.shape[0], -1)
 
     def positionner_centroides(self) -> None:
-        indices = np.random.choice(self.cerveau.matrice.shape[0], size=self.k, replace=False)
-        self.matrice_centroide = self.cerveau.matrice[indices]
+        indices = np.random.choice(self.matrice.shape[0], size=self.k, replace=False)
+        self.matrice_centroide = self.matrice[indices]
 
     def remplir_matrice_comparaison(self):
         historique = []
@@ -44,8 +37,8 @@ class Cluster():
 
             nb_migration = np.sum(self.matrice_comparaison != self.old_matrice_comparaison)
 
-            for i in range(len(self.cerveau.matrice)):
-                distances = [ls(self.cerveau.matrice[i],c) for c in self.matrice_centroide]
+            for i in range(len(self.matrice)):
+                distances = [ls(self.matrice[i],c) for c in self.matrice_centroide]
                 index_cluster = distances.index(min(distances))
                 self.matrice_comparaison[i] = index_cluster
 
@@ -65,7 +58,7 @@ class Cluster():
         for k in range(self.k):
             mask = (self.matrice_comparaison == k)
             if np.any(mask):
-                new_centroids[k] = self.cerveau.matrice[mask].mean(axis=0)
+                new_centroids[k] = self.matrice[mask].mean(axis=0)
 
         self.matrice_centroide = new_centroids
 
@@ -82,7 +75,7 @@ class Cluster():
         for i in range(self.k):
             list_partition = []
             for mot, values in self.cerveau.vocabulaire.items():
-                list_partition.append((mot, round(float(ls(self.cerveau.matrice[values], self.matrice_centroide[i])),2)))
+                list_partition.append((mot, round(float(ls(self.matrice[values], self.matrice_centroide[i])),2)))
             list_partition = sorted(list_partition, key=lambda t:t[1])[:self.n]
             list_resultat.append(list_partition.copy())
         return list_resultat
