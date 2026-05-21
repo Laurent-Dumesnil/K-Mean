@@ -62,7 +62,7 @@ class Parser():
             if args.n is not None and args.n <=0:
                 self.parser.error('\nLe nombre de mot à afficher par cluster doit être plus grand que 0.')
 
-            if args.conserver is not None and args.conserver < 0:
+            if args.conserver is not None and args.conserver <= 0:
                 self.parser.error('\nLe nombre de colonnes à conserver doit être plus grand que 0.')
 
             missing = [f'--{req}' if len(req) > 1 else f'-{req}'

@@ -1,21 +1,10 @@
-from sys import argv
 from time import perf_counter
-from traceback import print_exc
 from entrainerBD import EntrainerBD
 from predire import Predire
 from parser import Parser
 from DAO import DatabaseService
 from cluster import Cluster
 from graphe import Graphe
-import os
-
-#Commandes pour faire des tests pour Laurent
-    # main.py -b
-    # main.py -e -t5 --encodage UTF-8 --chemin ..\doc\GerminalUTF8.txt
-    # main.py -e -t5 --encodage UTF-8 --chemin ..\doc\LeVentreDeParisUTF8.txt
-    # main.py -e -t5 --encodage UTF-8 --chemin ..\doc\LesTroisMousquetairesUTF8.txt
-    # main.py -e -t5 --encodage UTF-8 --chemin ..\doc\DonQuichotteUTF8.txt
-    # main.py -c -t5 -k5 -n10 
 
 
 PRINT_TIME = 1
@@ -74,7 +63,6 @@ def main() -> int:
             s.create_table()
 
         if args.p:
-            #Possible d'avoir la normalisation / conservation au momement du chargement de la bd et non dans le clustering! 
             cerveau.charger_bd(conserver=args.conserver, normaliser=args.normaliser)
             demande_utilisateur(cerveau, args.v)
 
@@ -87,7 +75,6 @@ def main() -> int:
             if args.graphe:
                 graphe = Graphe(historique)
                 graphe.afficher_migrations()
-            #afficher_cluster(c.partitionne())
 
         if args.v >= PRINT_TIME:
             print(f'Opération effectuée en {perf_counter() - t:.2f} secondes.')
@@ -102,7 +89,6 @@ def main() -> int:
         print(ve)
         return -2
     except Exception as e:
-        # print_exc()
         print(e)
         return -1
 

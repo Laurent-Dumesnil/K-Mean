@@ -58,8 +58,7 @@ class EntrainerBD(Entrainer):
         for row,col,val in coo_db:
             self.old_matrice[row][col] = val
             self.old_matrice[col][row] = val
-        #self._matrice = self.old_matrice.copy()
-        self._matrice = self.old_matrice
+        self._matrice = self.old_matrice.copy()
 
 
 

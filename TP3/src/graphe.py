@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 class Graphe():
     def __init__(self, historique:list[int]):
