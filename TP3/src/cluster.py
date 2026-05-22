@@ -67,19 +67,7 @@ class Cluster():
         print(f'{nb_migration} migrations')
         for i in range(self.k):
             print(f'Partition {i} : {(self.matrice_comparaison == i).sum()} mots.')
-        print(f'\n*************************')
-                
-
-    # def formatter_resultat(self) -> list[tuple[str, np.float64]]:
-    #     list_resultat = []
-    #     for i in range(self.k):
-    #         list_partition = []
-    #         for mot, values in self.cerveau.vocabulaire.items():
-    #             list_partition.append((mot, round(float(ls(self.matrice[values], self.matrice_centroide[i])),2)))
-    #         list_partition = sorted(list_partition, key=lambda t:t[1])[:self.n]
-    #         list_resultat.append(list_partition.copy())
-    #     return list_resultat
-
+        print(f'\n*************************')            
         
     def formatter_resultat(self) -> list[tuple[str, np.float64]]:
         list_resultat = [[] for _ in range(self.k)]
@@ -88,8 +76,9 @@ class Cluster():
             centroid = self.matrice_comparaison[values]
             list_resultat[centroid].append((mot, round(float(ls(self.matrice[values], self.matrice_centroide[centroid])),2)))
             
-        for result in list_resultat():
-            result = sorted(result, key=lambda t:t[1])[:self.n]
+        for i, result in enumerate(list_resultat):
+            list_resultat[i] = sorted(result, key=lambda t:t[1])[:self.n]
             
         return list_resultat
+    
             
