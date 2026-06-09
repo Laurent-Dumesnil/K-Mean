@@ -5,14 +5,6 @@ L'algorithme K-Means regroupe les mots d'un corpus selon leurs patterns de coocc
 
 ---
 
-## Aperçu
-
-![Convergence de l'algorithme](Convergence_de_l_algorithme_de_partitionnement.png)
-
-*Convergence de l'algorithme : nombre de migrations par itération jusqu'à stabilisation des clusters.*
-
----
-
 ## Technologies utilisées
 
 `Python` · `NumPy` · `Matplotlib` · `SQLite3` · `argparse`
@@ -36,7 +28,7 @@ L'algorithme K-Means regroupe les mots d'un corpus selon leurs patterns de coocc
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/votre-utilisateur/kmeans-cooccurrence.git
+git clone https://github.com/Laurent-Dumesnil/K-Mean.git
 cd kmeans-cooccurrence
 
 # Installer les dépendances
