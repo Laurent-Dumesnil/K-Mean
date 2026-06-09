@@ -29,7 +29,7 @@ L'algorithme K-Means regroupe les mots d'un corpus selon leurs patterns de coocc
 ```bash
 # Cloner le dépôt
 git clone https://github.com/Laurent-Dumesnil/K-Mean.git
-cd kmeans-cooccurrence
+cd K-Mean
 
 # Installer les dépendances
 pip install numpy matplotlib
